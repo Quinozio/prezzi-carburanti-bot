@@ -13,7 +13,7 @@ configCarburantiScene.enter(async (ctx) => {
   await ctx.replyWithMarkdown(text);
   const menu = initCarburantiMenu(ctx as any);
 
-  if (ctx.message.text) {
+  if (ctx?.message?.text) {
     const isCommand = ctx.message.text[0] === "/";
     if (isCommand) {
       ctx.scene.leave();

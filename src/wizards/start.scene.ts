@@ -9,10 +9,10 @@ export const configCarburantiScene = new Scenes.BaseScene<CurrentCtx>(
   "configCarburanti"
 );
 configCarburantiScene.enter(async (ctx) => {
-  const messageId = ctx?.session?.keyboardMenu?.messageId;
-  if(messageId){
-    await ctx.deleteMessage(messageId);
-  }
+  // const messageId = ctx?.session?.keyboardMenu?.messageId;
+  // if(messageId){
+  //   await ctx.deleteMessage(messageId);
+  // }
   const menu = initCarburantiMenu(ctx as any);
   if (ctx?.message?.text) {
     const isCommand = ctx.message.text[0] === "/";

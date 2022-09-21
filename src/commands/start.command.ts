@@ -1,7 +1,8 @@
 import { CurrentCtx } from "../interfaces/context.models";
 
-export const startCommand = (ctx: CurrentCtx) => {
+export const startCommand = async (ctx: CurrentCtx) => {
   ctx.session.carburanti = undefined;
   ctx.session.posizione = undefined;
-  ctx.scene.enter("configCarburanti");
+  await ctx.scene.leave();
+  return await ctx.scene.enter("configCarburanti");
 };

@@ -100,6 +100,10 @@ if (process.env.NODE_ENV === "production") {
 //   },
 // });
 console.log("Bot is running!");
+
+process.on("uncaughtException", (err) => {
+  console.log("Caught exception: " + err);
+});
 // const test = async () => {
 //   const message = await bot.telegram.sendMessage("452970611", "ou?");
 //   bot.telegram.pinChatMessage("452970611", message.message_id);

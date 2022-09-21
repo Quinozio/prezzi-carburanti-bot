@@ -1,9 +1,10 @@
 import dotenv from "dotenv";
+import os from "os";
 import { Scenes, Telegraf } from "telegraf";
 import { GenericMenu } from "telegraf-menu";
 import LocalSession from "telegraf-session-local";
-import { economiciCommand } from "./commands/economici.commands";
 
+import { economiciCommand } from "./commands/economici.commands";
 import { helpCommand } from "./commands/help.commands";
 import {
   impostaCarburantiCommand,
@@ -13,7 +14,6 @@ import { startCommand } from "./commands/start.command";
 import { commands, CommandsEnum } from "./interfaces/commands.models";
 import { CurrentCtx } from "./interfaces/context.models";
 import { MenuAction } from "./interfaces/menu.models";
-import { initCarburantiMenu } from "./menus/carburanti.menu";
 import { initSession } from "./middlewares/init-session";
 import {
   configCarburantiScene,
@@ -64,7 +64,12 @@ bot.command(CommandsEnum.IMPOSTA_POSIZIONE, impostaPosizioneCommand as any);
 //   // Using context shortcut
 //   ctx.reply(`Ciao ${ctx.from.first_name}`);
 // });
-bot.launch();
+bot.launch({
+  webhook: {
+    domain: os.hostname(),
+    port: process.env.PORT ? +process.env.PORT : 3000,
+  },
+});
 console.log("Bot is running!");
 // const test = async () => {
 //   const message = await bot.telegram.sendMessage("452970611", "ou?");

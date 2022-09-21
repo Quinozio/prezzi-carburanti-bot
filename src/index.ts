@@ -3,6 +3,7 @@ import os from "os";
 import { Scenes, Telegraf } from "telegraf";
 import { GenericMenu } from "telegraf-menu";
 import LocalSession from "telegraf-session-local";
+import express from "express";
 
 import { economiciCommand } from "./commands/economici.commands";
 import { helpCommand } from "./commands/help.commands";
@@ -22,6 +23,7 @@ import {
 
 dotenv.config();
 
+const app = express();
 const bot = new Telegraf<CurrentCtx>(process.env.BOT_TOKEN ?? "");
 const session = new LocalSession({ database: "/tmp/local.db.json" });
 bot.use(session.middleware());
@@ -64,12 +66,21 @@ bot.command(CommandsEnum.IMPOSTA_POSIZIONE, impostaPosizioneCommand as any);
 //   // Using context shortcut
 //   ctx.reply(`Ciao ${ctx.from.first_name}`);
 // });
-bot.launch({
-  webhook: {
-    domain: os.hostname(),
-    port: process.env.PORT ? +process.env.PORT : 3000,
-  },
-});
+
+const onStartServer = async () => {
+  app.use(await bot.createWebhook({ domain: os.hostname() }));
+};
+onStartServer();
+
+const port = process.env.PORT ? +process.env.PORT : 3000;
+app.listen(port, () => console.log("Listening on port", port));
+
+// bot.launch({
+//   webhook: {
+//     domain: os.hostname(),
+//     port: process.env.PORT ? +process.env.PORT : 3000,
+//   },
+// });
 console.log("Bot is running!");
 // const test = async () => {
 //   const message = await bot.telegram.sendMessage("452970611", "ou?");

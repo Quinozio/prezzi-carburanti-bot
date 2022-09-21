@@ -25,7 +25,9 @@ dotenv.config();
 
 const app = express();
 const bot = new Telegraf<CurrentCtx>(process.env.BOT_TOKEN ?? "");
-const session = new LocalSession({ database: "/tmp/local.db.json" });
+const session = new LocalSession({
+  database: process.env.DB_FOLDER + "local.db.json",
+});
 bot.use(session.middleware());
 bot.use(initSession);
 
@@ -67,13 +69,21 @@ bot.command(CommandsEnum.IMPOSTA_POSIZIONE, impostaPosizioneCommand as any);
 //   ctx.reply(`Ciao ${ctx.from.first_name}`);
 // });
 
-const onStartServer = async () => {
-  app.use(await bot.createWebhook({ domain: "https://calm-gold-chiton-wear.cyclic.app/" }));
-};
-onStartServer();
+if (process.env.NODE_ENV === "production") {
+  const onStartServer = async () => {
+    app.use(
+      await bot.createWebhook({
+        domain: "https://calm-gold-chiton-wear.cyclic.app/",
+      })
+    );
+  };
+  onStartServer();
 
-const port = process.env.PORT ? +process.env.PORT : 3000;
-app.listen(port, () => console.log("Listening on port", port));
+  const port = process.env.PORT ? +process.env.PORT : 3000;
+  app.listen(port, () => console.log("Listening on port", port));
+} else {
+  bot.launch();
+}
 
 // bot.launch({
 //   webhook: {

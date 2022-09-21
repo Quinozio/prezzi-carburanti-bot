@@ -49,35 +49,37 @@ configPosizioneScene.enter(async (ctx) => {
 
 // configPosizioneScene.on("message", (ctx) => ctx.reply("Try /echo or /greeter"));
 
-configPosizioneScene.on("text", (ctx) => {
+configPosizioneScene.on("text", async (ctx) => {
   if (ctx.message.text) {
     const isCommand = ctx.message.text[0] === "/";
     if (isCommand) {
       ctx.scene.leave();
     }
-    fetch(
+    await ctx.reply("...cerco la posizione");
+    const res = await fetch(
       `https://nominatim.openstreetmap.org/search?q=${ctx.message.text}&format=geocodejson`
-    ).then(async (res: any) => {
-      const json = await res.json();
-      const coordinates = json.features[0]?.geometry?.coordinates;
-      if (!coordinates) {
-        configPosizioneScene.enter();
-        return ctx.reply("Nessuna posizione trovata! Si prega di riprovare.");
-      }
-      const lat = coordinates[1];
-      const long = coordinates[0];
-      const text = `La posizione è corretta?
+    );
+    const json = await res.json();
+    const coordinates = json.features[0]?.geometry?.coordinates;
+    if (!coordinates) {
+      configPosizioneScene.enter();
+      return await ctx.reply(
+        "Nessuna posizione trovata! Si prega di riprovare."
+      );
+    }
+    const lat = coordinates[1];
+    const long = coordinates[0];
+    const text = `La posizione è corretta?
             https://www.google.com/maps/search/?api=1&query=${lat},${long}`;
 
-      ctx.session.posizione = { description: ctx.message.text, lat, long };
-      await ctx.reply(
-        text,
-        Markup.inlineKeyboard([
-          Markup.button.callback("Si", "Si"),
-          Markup.button.callback("No", "No"),
-        ])
-      );
-    });
+    ctx.session.posizione = { description: ctx.message.text, lat, long };
+    return await ctx.reply(
+      text,
+      Markup.inlineKeyboard([
+        Markup.button.callback("Si", "Si"),
+        Markup.button.callback("No", "No"),
+      ])
+    );
   }
 });
 

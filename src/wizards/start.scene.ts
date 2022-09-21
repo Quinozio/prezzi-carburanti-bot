@@ -30,9 +30,9 @@ configCarburantiScene.enter(async (ctx) => {
   };
   await menu.sendMenu(ctx);
 });
-configCarburantiScene.leave((ctx) => {
+configCarburantiScene.leave(async (ctx) => {
   if (ctx.session.carburanti && ctx.session.posizione) {
-    ctx.reply(
+    return await ctx.reply(
       `Puoi iniziare a cercare i distributori più economici con il comando /${CommandsEnum.GET_DISTRIBUTORI_ECONOMICI}`
     );
   }
@@ -50,7 +50,7 @@ configPosizioneScene.enter(async (ctx) => {
 // configPosizioneScene.on("message", (ctx) => ctx.reply("Try /echo or /greeter"));
 
 configPosizioneScene.on("text", async (ctx) => {
-  if (ctx.message.text) {
+  if (ctx?.message?.text) {
     const isCommand = ctx.message.text[0] === "/";
     if (isCommand) {
       ctx.scene.leave();

@@ -23,7 +23,9 @@ export const economiciCommand = async (ctx: CurrentCtx) => {
     const distributori = await getDistributoriVicini(
       ctx.session.carburanti,
       ctx.session.posizione
-    );
+    ).catch((error) => {
+      console.log(error);
+    });
     console.log("arrivo qui4?");
     const links = distributori.map(
       (distributore) =>

@@ -54,7 +54,7 @@ configPosizioneScene.on("text", async (ctx) => {
   if (ctx?.message?.text) {
     const isCommand = ctx.message.text[0] === "/";
     if (isCommand) {
-      ctx.scene.leave();
+      return await ctx.scene.leave();
     }
     await ctx.reply("...cerco la posizione");
     const res = await fetch(

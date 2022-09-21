@@ -1,5 +1,5 @@
 import { getDistributoriVicini } from "../controllers/distributori.controller";
-import { Carburanti } from "../interfaces/carburanti.models";
+import { Carburanti, IDistributore } from "../interfaces/carburanti.models";
 import { CommandsEnum } from "../interfaces/commands.models";
 import { CurrentCtx } from "../interfaces/context.models";
 import haversine from "haversine-distance";
@@ -20,11 +20,12 @@ export const economiciCommand = async (ctx: CurrentCtx) => {
     return ctx?.scene?.leave();
   } else {
     console.log("arrivo qui3?");
-    const distributori = await getDistributoriVicini(
+    const distributori: IDistributore[] = await getDistributoriVicini(
       ctx.session.carburanti,
       ctx.session.posizione
     ).catch((error) => {
       console.log(error);
+      return error;
     });
     console.log("arrivo qui4?");
     const links = distributori.map(

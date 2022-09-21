@@ -1,9 +1,8 @@
 import dotenv from "dotenv";
-import os from "os";
+import fastify from "fastify";
 import { Scenes, Telegraf } from "telegraf";
 import { GenericMenu } from "telegraf-menu";
 import LocalSession from "telegraf-session-local";
-import express from "express";
 
 import { economiciCommand } from "./commands/economici.commands";
 import { helpCommand } from "./commands/help.commands";
@@ -23,7 +22,7 @@ import {
 
 dotenv.config();
 
-const app = express();
+const app = fastify();
 const bot = new Telegraf<CurrentCtx>(process.env.BOT_TOKEN ?? "");
 const session = new LocalSession({
   database: process.env.DB_FOLDER + "local.db.json",
@@ -71,16 +70,16 @@ bot.command(CommandsEnum.IMPOSTA_POSIZIONE, impostaPosizioneCommand as any);
 
 if (process.env.NODE_ENV === "production") {
   const onStartServer = async () => {
-    app.use(
-      await bot.createWebhook({
-        domain: "https://calm-gold-chiton-wear.cyclic.app/",
-      })
+    const webhook = await bot.createWebhook({
+      domain: "https://calm-gold-chiton-wear.cyclic.app/",
+    });
+    app.post(bot.secretPathComponent(), (req, rep) =>
+      webhook(req.raw, rep.raw)
     );
+    const port = process.env.PORT ? +process.env.PORT : 3000;
+    app.listen({ port }).then(() => console.log("Listening on port", port));
   };
   onStartServer();
-
-  const port = process.env.PORT ? +process.env.PORT : 3000;
-  app.listen(port, () => console.log("Listening on port", port));
 } else {
   bot.launch();
 }

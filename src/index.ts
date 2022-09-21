@@ -68,7 +68,7 @@ bot.command(CommandsEnum.IMPOSTA_POSIZIONE, impostaPosizioneCommand as any);
 // });
 
 const onStartServer = async () => {
-  app.use(await bot.createWebhook({ domain: os.hostname() }));
+  app.use(await bot.createWebhook({ domain: "https://calm-gold-chiton-wear.cyclic.app/" }));
 };
 onStartServer();
 

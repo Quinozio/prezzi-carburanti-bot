@@ -12,7 +12,7 @@ export const submitMenuEvent = new EventEmitter();
 export const initCarburantiMenu = (ctx: CurrentCtx) => {
   return new RadioMenu<CurrentCtx, Carburanti>({
     action: MenuAction.IMPOSTA_CARBURANTE,
-    message: "Imposta preferenza carburanti",
+    message: "Ciao, imposta un tipo di carburante \u{26FD} per poter cercare i distributori più economici vicino a te!",
     submitMessage: "Conferma",
     filters: CARBURANTE_MENU_FILTERS,
     state: ctx.session.carburanti,

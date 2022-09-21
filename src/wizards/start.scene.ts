@@ -9,10 +9,7 @@ export const configCarburantiScene = new Scenes.BaseScene<CurrentCtx>(
   "configCarburanti"
 );
 configCarburantiScene.enter(async (ctx) => {
-  const text = `Ciao, imposta un tipo di carburante \u{26FD} per poter cercare i distributori più economici vicino a te!`;
-  await ctx.replyWithMarkdown(text);
   const menu = initCarburantiMenu(ctx as any);
-
   if (ctx?.message?.text) {
     const isCommand = ctx.message.text[0] === "/";
     if (isCommand) {
@@ -28,7 +25,7 @@ configCarburantiScene.enter(async (ctx) => {
       ctx.scene.leave();
     }
   };
-  await menu.sendMenu(ctx);
+  return await menu.sendMenu(ctx);
 });
 configCarburantiScene.leave(async (ctx) => {
   if (ctx.session.carburanti && ctx.session.posizione) {
@@ -44,7 +41,7 @@ export const configPosizioneScene = new Scenes.BaseScene<CurrentCtx>(
 configPosizioneScene.enter(async (ctx) => {
   const text =
     "Scrivi un indirizzo dove vuoi cercare oppure premi il tasto allega e invia la tua posizione corrente \u{1F4CD}";
-  await ctx.replyWithMarkdown(text);
+  return await ctx.replyWithMarkdown(text);
 });
 
 // configPosizioneScene.on("message", (ctx) => ctx.reply("Try /echo or /greeter"));
@@ -92,9 +89,9 @@ configPosizioneScene.action("No", async (ctx) => {
   return ctx.scene.enter("configPosizione");
 });
 
-configPosizioneScene.leave((ctx) => {
+configPosizioneScene.leave(async (ctx) => {
   if (ctx.session.posizione) {
-    ctx.reply(
+    return await ctx.reply(
       `Puoi iniziare a cercare i distributori più economici con il comando /${CommandsEnum.GET_DISTRIBUTORI_ECONOMICI}`
     );
   }

@@ -64,9 +64,8 @@ bot.command(CommandsEnum.IMPOSTA_POSIZIONE, impostaPosizioneCommand as any);
 //   // Using context shortcut
 //   ctx.reply(`Ciao ${ctx.from.first_name}`);
 // });
-
 bot.launch();
-
+console.log("Bot is running!");
 // const test = async () => {
 //   const message = await bot.telegram.sendMessage("452970611", "ou?");
 //   bot.telegram.pinChatMessage("452970611", message.message_id);

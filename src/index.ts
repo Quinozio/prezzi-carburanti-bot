@@ -73,7 +73,7 @@ if (process.env.NODE_ENV === "production") {
     const webhook = await bot.createWebhook({
       domain: "https://calm-gold-chiton-wear.cyclic.app/",
     });
-    app.post(bot.secretPathComponent(), (req, rep) =>
+    app.post("/" + bot.secretPathComponent(), (req, rep) =>
       webhook(req.raw, rep.raw)
     );
     const port = process.env.PORT ? +process.env.PORT : 3000;

@@ -40,7 +40,7 @@ export const configPosizioneScene = new Scenes.BaseScene<CurrentCtx>(
 );
 configPosizioneScene.enter(async (ctx) => {
   const text =
-    "Scrivi un indirizzo dove vuoi cercare oppure premi il tasto allega e invia la tua posizione corrente \u{1F4CD}";
+    "Scrivi un indirizzo dove vuoi cercare (CAP, città ecc.) \u{1F4CD}";
   return await ctx.replyWithMarkdown(text);
 });
 

@@ -9,20 +9,24 @@ export const configCarburantiScene = new Scenes.BaseScene<CurrentCtx>(
   "configCarburanti"
 );
 configCarburantiScene.enter(async (ctx) => {
+  const messageId = ctx?.session?.keyboardMenu?.messageId;
+  if(messageId){
+    await ctx.deleteMessage(messageId);
+  }
   const menu = initCarburantiMenu(ctx as any);
   if (ctx?.message?.text) {
     const isCommand = ctx.message.text[0] === "/";
     if (isCommand) {
-      ctx.scene.leave();
+      return await ctx.scene.leave();
     }
   }
 
-  menu.genericConfig.onSubmit = (submitCtx, state) => {
+  menu.genericConfig.onSubmit = async (submitCtx, state) => {
     ctx.session.carburanti = state;
     if (!ctx.session.posizione) {
-      ctx.scene.enter("configPosizione");
+      return await ctx.scene.enter("configPosizione");
     } else {
-      ctx.scene.leave();
+      return await ctx.scene.leave();
     }
   };
   return await menu.sendMenu(ctx);

@@ -10,7 +10,7 @@ export interface IPosition {
 }
 export interface ISession {
   posizione?: IPosition;
-  carburanti: Carburanti;
+  carburanti?: Carburanti;
   keyboardMenu: GenericMenu;
 }
 export type CurrentCtx = DefaultCtx & {

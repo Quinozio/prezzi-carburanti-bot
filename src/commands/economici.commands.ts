@@ -6,11 +6,15 @@ import haversine from "haversine-distance";
 
 export const economiciCommand = async (ctx: CurrentCtx) => {
   if (!ctx.session.carburanti) {
-    ctx.reply("Sembra che tu non abbia impostato i filtri per carburante!");
+    await ctx.reply(
+      "Sembra che tu non abbia impostato i filtri per carburante!"
+    );
+    return ctx.scene.leave();
   } else if (!ctx.session.posizione) {
-    ctx.reply(
+    await ctx.reply(
       `Sembra che tu non abbia impostato la posizione di ricerca!\nUsa il comando /${CommandsEnum.IMPOSTA_POSIZIONE} per impostare la tua posizione`
     );
+    return ctx.scene.leave();
   } else {
     const distributori = await getDistributoriVicini(
       ctx.session.carburanti,

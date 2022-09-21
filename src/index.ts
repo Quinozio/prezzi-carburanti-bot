@@ -23,7 +23,7 @@ import {
 dotenv.config();
 
 const bot = new Telegraf<CurrentCtx>(process.env.BOT_TOKEN ?? "");
-const session = new LocalSession({ database: "../tmp/local.db.json" });
+const session = new LocalSession({ database: "/tmp/local.db.json" });
 bot.use(session.middleware());
 bot.use(initSession);
 

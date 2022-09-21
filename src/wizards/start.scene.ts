@@ -9,27 +9,23 @@ export const configCarburantiScene = new Scenes.BaseScene<CurrentCtx>(
   "configCarburanti"
 );
 configCarburantiScene.enter(async (ctx) => {
-  // const messageId = ctx?.session?.keyboardMenu?.messageId;
-  // if(messageId){
-  //   await ctx.deleteMessage(messageId);
-  // }
   const menu = initCarburantiMenu(ctx as any);
   if (ctx?.message?.text) {
     const isCommand = ctx.message.text[0] === "/";
     if (isCommand) {
-      return await ctx.scene.leave();
+      ctx.scene.leave();
     }
   }
 
-  menu.genericConfig.onSubmit = async (submitCtx, state) => {
+  menu.genericConfig.onSubmit = (submitCtx, state) => {
     ctx.session.carburanti = state;
     if (!ctx.session.posizione) {
-      return await ctx.scene.enter("configPosizione");
+      ctx.scene.enter("configPosizione");
     } else {
-      return await ctx.scene.leave();
+      ctx.scene.leave();
     }
   };
-  return await menu.sendMenu(ctx);
+  return menu.sendMenu(ctx);
 });
 configCarburantiScene.leave(async (ctx) => {
   if (ctx.session.carburanti && ctx.session.posizione) {
@@ -54,7 +50,7 @@ configPosizioneScene.on("text", async (ctx) => {
   if (ctx?.message?.text) {
     const isCommand = ctx.message.text[0] === "/";
     if (isCommand) {
-      return await ctx.scene.leave();
+      ctx.scene.leave();
     }
     await ctx.reply("...cerco la posizione");
     const res = await fetch(

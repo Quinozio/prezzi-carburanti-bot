@@ -70,15 +70,14 @@ bot.command(CommandsEnum.IMPOSTA_POSIZIONE, impostaPosizioneCommand as any);
 
 if (process.env.NODE_ENV === "production") {
   const port = process.env.PORT ? +process.env.PORT : 3000;
-  bot.launch();
-  // bot
-  //   .launch({
-  //     webhook: {
-  //       domain: "https://calm-gold-chiton-wear.cyclic.app/",
-  //       port,
-  //     },
-  //   })
-  //   .then(() => console.log("Webhook bot listening on port", port));
+  bot
+    .launch({
+      webhook: {
+        domain: "https://calm-gold-chiton-wear.cyclic.app/",
+        port,
+      },
+    })
+    .then(() => console.log("Webhook bot listening on port", port));
   // const onStartServer = async () => {
   //   const webhook = await bot.createWebhook({
   //     domain: "https://calm-gold-chiton-wear.cyclic.app/",

@@ -68,30 +68,7 @@ bot.command(CommandsEnum.IMPOSTA_POSIZIONE, impostaPosizioneCommand as any);
 //   ctx.reply(`Ciao ${ctx.from.first_name}`);
 // });
 
-if (process.env.NODE_ENV === "production") {
-  const port = process.env.PORT ? +process.env.PORT : 3000;
-  bot
-    .launch({
-      webhook: {
-        domain: "https://calm-gold-chiton-wear.cyclic.app/",
-        port,
-      },
-    })
-    .then(() => console.log("Webhook bot listening on port", port));
-  // const onStartServer = async () => {
-  //   const webhook = await bot.createWebhook({
-  //     domain: "https://calm-gold-chiton-wear.cyclic.app/",
-  //   });
-  //   app.post("/" + bot.secretPathComponent(), (req, rep) =>
-  //     webhook(req.raw, rep.raw)
-  //   );
-  //   const port = process.env.PORT ? +process.env.PORT : 3000;
-  //   app.listen({ port }).then(() => console.log("Listening on port", port));
-  // };
-  // onStartServer();
-} else {
-  bot.launch();
-}
+bot.launch();
 
 // bot.launch({
 //   webhook: {

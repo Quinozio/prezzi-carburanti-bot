@@ -5,21 +5,17 @@ import { CurrentCtx } from "../interfaces/context.models";
 import haversine from "haversine-distance";
 
 export const economiciCommand = async (ctx: CurrentCtx) => {
-  console.log("arrivo qui?");
   if (!ctx?.session?.carburanti) {
-    console.log("arrivo qui1?");
     await ctx?.reply(
       "Sembra che tu non abbia impostato i filtri per carburante!"
     );
     return ctx?.scene?.leave();
   } else if (!ctx?.session?.posizione) {
-    console.log("arrivo qui2?");
     await ctx?.reply(
       `Sembra che tu non abbia impostato la posizione di ricerca!\nUsa il comando /${CommandsEnum.IMPOSTA_POSIZIONE} per impostare la tua posizione`
     );
     return ctx?.scene?.leave();
   } else {
-    console.log("arrivo qui3?");
     const distributori: IDistributore[] = await getDistributoriVicini(
       ctx.session.carburanti,
       ctx.session.posizione
@@ -27,12 +23,10 @@ export const economiciCommand = async (ctx: CurrentCtx) => {
       console.log(error);
       return error;
     });
-    console.log("arrivo qui4?");
     const links = distributori.map(
       (distributore) =>
         `(https://www.google.com/maps/search/?api=1&query=${distributore.location.lat},${distributore.location.lng})`
     );
-    console.log("arrivo qui5?");
     const { lat, long } = ctx.session.posizione;
     const distributoriText = distributori.reduce((acc, val, index) => {
       const { lat: lat2, lng: long2 } = val.location;
@@ -52,12 +46,12 @@ export const economiciCommand = async (ctx: CurrentCtx) => {
       `;
     }, "");
     let distributoriTextEscaped = decodeURI(distributoriText)
-      .replaceAll("(", "\\(")
-      .replaceAll(")", "\\)")
-      .replaceAll(".", "\\.")
-      .replaceAll("-", "\\-")
-      .replaceAll("|", "\\|")
-      .replaceAll("+", "\\+");
+      .replace(new RegExp("[(]", "g"), "\\(")
+      .replace(new RegExp("[)]", "g"), "\\)")
+      .replace(new RegExp("[.]", "g"), "\\.")
+      .replace(new RegExp("[-]", "g"), "\\-")
+      .replace(new RegExp("[|]", "g"), "\\|")
+      .replace(new RegExp("[+]", "g"), "\\+");
 
     links.forEach((link) => {
       distributoriTextEscaped = distributoriTextEscaped.replace("$link", link);
@@ -71,7 +65,6 @@ export const economiciCommand = async (ctx: CurrentCtx) => {
         carburanteText = key;
       }
     });
-    console.log("arrivo qui6?");
     await ctx.reply(
       `Ecco a te i distributori di ${carburanteText} più economici vicino a ${ctx.session.posizione.description}:`
     );

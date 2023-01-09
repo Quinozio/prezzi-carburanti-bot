@@ -15,6 +15,7 @@ export const getDistributoriVicini = async (
     points: [{ lat: posizione.lat, lng: posizione.long }],
     fuelType: carburante,
     priceOrder: "asc",
+    radius: 5,
   };
   const response = await fetch(
     `https://carburanti.mise.gov.it/ospzApi/search/zone`,
